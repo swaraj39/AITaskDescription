@@ -6,6 +6,7 @@ function TasksPage() {
   const { id } = useParams();
 
   const [tasks, setTasks] = useState([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [creating, setCreating] = useState(false);
@@ -79,25 +80,50 @@ function TasksPage() {
     return "#64748b";
   };
 
+  /* ---------- SEARCH FILTER ---------- */
+
+  const filteredTasks = tasks.filter((task) => {
+    const text = search.toLowerCase();
+
+    return (
+      task.title?.toLowerCase().includes(text) ||
+      task.description?.toLowerCase().includes(text) ||
+      task.assignee?.toLowerCase().includes(text) ||
+      task.status?.toLowerCase().includes(text) ||
+      task.priority?.toLowerCase().includes(text)
+    );
+  });
+
   if (loading) return <div style={styles.center}>Loading tasks...</div>;
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
         <h2>Project {id} Tasks</h2>
+
         <button style={styles.primaryBtn} onClick={() => setShowModal(true)}>
           + New Task
         </button>
       </div>
 
-      {tasks.length === 0 ? (
-        <p style={styles.empty}>No tasks created yet</p>
+      {/* SEARCH BAR */}
+
+      <input
+        placeholder="Search tasks..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={styles.search}
+      />
+
+      {filteredTasks.length === 0 ? (
+        <p style={styles.empty}>No tasks found</p>
       ) : (
         <div style={styles.grid}>
-          {tasks.map((task) => (
+          {filteredTasks.map((task) => (
             <div key={task.id} style={styles.card}>
               <div style={styles.cardHeader}>
                 <h3>{task.title}</h3>
+
                 <div style={styles.badges}>
                   <span
                     style={{
@@ -106,7 +132,7 @@ function TasksPage() {
                     }}
                   >
                     {task.status}
-                  </span><br></br>
+                  </span>
 
                   {task.priority && (
                     <span
@@ -185,7 +211,10 @@ function TasksPage() {
             </select>
 
             <div style={styles.modalActions}>
-              <button style={styles.secondaryBtn} onClick={() => setShowModal(false)}>
+              <button
+                style={styles.secondaryBtn}
+                onClick={() => setShowModal(false)}
+              >
                 Cancel
               </button>
 
@@ -206,7 +235,15 @@ const styles = {
   header: {
     display: "flex",
     justifyContent: "space-between",
-    marginBottom: 30,
+    marginBottom: 20,
+  },
+
+  search: {
+    width: "100%",
+    padding: 10,
+    border: "1px solid #d1d5db",
+    borderRadius: 6,
+    marginBottom: 25,
   },
 
   grid: {
@@ -225,17 +262,20 @@ const styles = {
   cardHeader: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
   },
 
-  badges: { display: "flex", gap: 6 },
-
-  badge: {
-    color: "white",
-    padding: "3px 8px",
-    borderRadius: 6,
-    fontSize: 12,
+  badges: {
+    display: "flex",
+    gap: 6
   },
+badge: {
+  color: "white",
+  padding: "4px 8px",
+  borderRadius: 6,
+  fontSize: 12,
+  display: "inline-block",
+  height: "fit-content"
+},
 
   desc: {
     margin: "10px 0",
@@ -249,20 +289,20 @@ const styles = {
   },
 
   primaryBtn: {
-    background: "rgb(0, 0, 0)",
+    background: "black",
     color: "white",
     border: "none",
-    padding: 7,
-    height: "40px",
+    padding: 8,
     borderRadius: 6,
     cursor: "pointer",
+    height: "fit-content"
   },
 
   secondaryBtn: {
     marginTop: 10,
     background: "#f1f5f9",
     border: "none",
-    padding: "8px",
+    padding: 8,
     borderRadius: 6,
     cursor: "pointer",
   },
