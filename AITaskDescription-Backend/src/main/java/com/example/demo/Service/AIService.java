@@ -25,7 +25,7 @@ public class AIService {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final String HF_API_URL = "https://openrouter.ai/api/v1/completions";
-    private final String HF_API_KEY = "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"; // replace
+    private final String HF_API_KEY = "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"; // replace
     // with
     // real
     // key

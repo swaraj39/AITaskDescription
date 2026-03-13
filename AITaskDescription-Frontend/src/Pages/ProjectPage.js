@@ -94,7 +94,7 @@ function ProjectsPage() {
     return (
       <div style={styles.center}>
         <div style={styles.spinner}></div>
-        <h2>Loading Projects...</h2>
+        <h2 style={styles.load}>Loading Projects...</h2>
       </div>
     );
   }
@@ -251,7 +251,10 @@ function ProjectsPage() {
 
 
 const styles = {
-
+  load:{
+    background: "linear-gradient(135deg, #000000 0%, #000000 100%)",
+    color: "white"
+  },
   container:{
     padding:"40px",
     minHeight:"100vh",
@@ -341,7 +344,8 @@ const styles = {
     flexDirection:"column",
     alignItems:"center",
     justifyContent:"center",
-    gap:"15px"
+    gap:"15px",
+    background: "linear-gradient(135deg, #000000 0%, #000000 100%)"
   },
 
   spinner:{

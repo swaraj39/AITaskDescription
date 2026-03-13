@@ -95,16 +95,17 @@ public class FrontController {
     }
     @PutMapping("/update/task/{id}")
     public Task updateTask(@RequestBody TaskDTO taskDTO, @PathVariable Long id) {
-        Projects projects = projectRepo.findById(id).orElseThrow();
+        System.out.println(taskDTO + " " + id);
+        Projects projects = projectRepo.findById(taskDTO.getProjectid()).orElseThrow();
         Task task = taskRepo.findById(id).get();
-        String result = aiService.generateText(taskDTO.getTitle());
-        System.out.println(result);
-        List<String> list = Arrays.stream(result.split(":")).toList();
+        //String result = aiService.generateText(taskDTO.getTitle());
+        //System.out.println(result);
+        ///List<String> list = Arrays.stream(result.split(":")).toList();
         task.setTitle(taskDTO.getTitle());
         task.setAssignee(taskDTO.getAssignee());
         task.setStatus(taskDTO.getStatus());
-        task.setDescription(list.get(0));
-        task.setPriority(list.get(1));
+        //task.setDescription(list.get(0));
+        //task.setPriority(list.get(1));
         taskRepo.save(task);
         return task;
     }
