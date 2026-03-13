@@ -25,7 +25,7 @@ public class AIService {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final String HF_API_URL = "https://openrouter.ai/api/v1/completions";
-    private final String HF_API_KEY = "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"; // replace
+    private final String HF_API_KEY = "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"; // replace
     // with
     // real
     // key
@@ -111,24 +111,27 @@ public class AIService {
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("model", "arcee-ai/trinity-large-preview:free");
-        payload.put("prompt", prompt + "This is an task title that what to do. " + "and" + name + "This the name of the project with project discription: " + description + """ 
-                You are an assistant that converts a task into a brief description and assigns a priority.
+        payload.put("prompt", prompt + " -This is task. "+ name + " -This is project name." 
+        + description +" -This is project description " + """
+                You are an assistant that converts a task into a short employee-friendly description and assigns a priority.
                 
                 Instructions:
-                1. Read the task provided.
-                2. Write a short and clear description of the task for an employee (1–2 sentences maximum).
-                3. Assign a priority level based on urgency and importance.
-                4. Priority must be ONLY one of these values: "low", "medium", or "high".
-                5. Do NOT include any explanation for the priority.
-                6. Return the output ONLY in valid JSON format.
+                - Read the TASK provided below.
+                - Rewrite it into a clear and long description for an employee.
+                - Assign a priority based on urgency and importance.
+                - Priority must be ONLY one of these values: "low", "medium", or "high".
+                - Do NOT explain the priority.
+                - Return ONLY valid JSON.
+                
+                TASK:
+                \"\"\"%s\"\"\"
                 
                 Output format:
                 {
                   "description": "Brief explanation of the task for the employee",
                   "priority": "low | medium | high"
                 }
-                
-                """);
+                """.formatted(prompt));
         payload.put("max_tokens", 200);
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);

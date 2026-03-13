@@ -77,8 +77,10 @@ public class FrontController {
     public String addTask(@RequestBody TaskDTO taskDTO) {
         String prompt = taskDTO.getTitle();
         String name = projectRepo.findById(taskDTO.getProjectid()).get().getName();
+        Projects projects = projectRepo.findById(taskDTO.getProjectid()).get();
         String description = projectRepo.findById(taskDTO.getProjectid()).get().getDescription();
-        String result = aiService.generateText(prompt);
+        // String result = aiService.generateText(prompt);
+        String result = aiService.generateTextByTitle(prompt,name,projects.getDescription());
         System.out.println(result);
         List<String> list = Arrays.stream(result.split(":")).toList();
         Task build = Task.builder().title(taskDTO.getTitle())

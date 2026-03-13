@@ -8,14 +8,13 @@ function TasksPage() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
 
   const [newTask, setNewTask] = useState({
     title: "",
     status: "TODO",
     assignee: "",
-    projectid: id
+    projectid: id,
   });
 
   useEffect(() => {
@@ -24,7 +23,6 @@ function TasksPage() {
 
   const loadTasks = () => {
     setLoading(true);
-
     fetch(`http://localhost:8090/get/taskbyproject/${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -39,11 +37,10 @@ function TasksPage() {
 
   const createTask = () => {
     setCreating(true);
-
     fetch("http://localhost:8090/add/task", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newTask)
+      body: JSON.stringify(newTask),
     })
       .then(() => {
         setShowModal(false);
@@ -51,7 +48,7 @@ function TasksPage() {
           title: "",
           status: "TODO",
           assignee: "",
-          projectid: id
+          projectid: id,
         });
         loadTasks();
       })
@@ -86,6 +83,7 @@ function TasksPage() {
 
   return (
     <div style={styles.container}>
+      {/* Header */}
       <div style={styles.header}>
         <h1>Tasks for Project {id}</h1>
         <button style={styles.createBtn} onClick={() => setShowModal(true)}>
@@ -93,30 +91,56 @@ function TasksPage() {
         </button>
       </div>
 
+      {/* Task Grid */}
       {tasks.length === 0 ? (
         <p style={styles.noTasks}>No tasks found</p>
       ) : (
         <div style={styles.grid}>
           {tasks.map((task) => (
-            <div key={task.id} style={styles.card}>
+            <div
+              key={task.id}
+              style={styles.card}
+              onMouseEnter={(e) =>
+                e.currentTarget.style.boxShadow =
+                  "0 12px 20px rgba(0,0,0,0.15)"
+              }
+              onMouseLeave={(e) =>
+                e.currentTarget.style.boxShadow = "0 6px 12px rgba(0,0,0,0.1)"
+              }
+            >
               <div style={styles.cardHeader}>
                 <h2 style={styles.taskTitle}>{task.title}</h2>
-                <span
-                  style={{
-                    ...styles.statusBadge,
-                    backgroundColor: getStatusColor(task.status)
-                  }}
-                >
-                  {task.status}
-                </span>
+                <div style={styles.badges}>
+                  <span
+                    style={{
+                      ...styles.statusBadge,
+                      backgroundColor: getStatusColor(task.status),
+                    }}
+                  >
+                    {task.status}
+                  </span>
+                  <span
+                    style={{
+                      ...styles.priorityBadge,
+                      backgroundColor:
+                        task.priority === "high"
+                          ? "#e53935"
+                          : task.priority === "medium"
+                          ? "#fbc02d"
+                          : "#4caf50",
+                    }}
+                  >
+                    {task.priority.toUpperCase()}
+                  </span>
+                </div>
               </div>
-
               <p style={styles.description}>{task.description}</p>
-
               <div style={styles.footer}>
                 <button
                   style={styles.viewBtn}
-                  onClick={() => navigate(`/get/commentbytask/${task.id}`)}
+                  onClick={() =>
+                    navigate(`/get/commentbytask/${task.id}`)
+                  }
                 >
                   View Comments
                 </button>
@@ -131,7 +155,6 @@ function TasksPage() {
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
             <h2>Create Task</h2>
-
             <input
               placeholder="Task Title"
               value={newTask.title}
@@ -141,7 +164,6 @@ function TasksPage() {
               style={styles.input}
               disabled={creating}
             />
-
             <input
               placeholder="Assignee"
               value={newTask.assignee}
@@ -151,7 +173,6 @@ function TasksPage() {
               style={styles.input}
               disabled={creating}
             />
-
             <select
               value={newTask.status}
               onChange={(e) =>
@@ -173,7 +194,6 @@ function TasksPage() {
               >
                 {creating ? "Creating..." : "Create"}
               </button>
-
               <button
                 style={styles.cancelBtn}
                 onClick={() => setShowModal(false)}
@@ -189,15 +209,25 @@ function TasksPage() {
   );
 }
 
+// Styles
 const styles = {
   container: { padding: "40px", backgroundColor: "#f5f7fb", minHeight: "100vh" },
   header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" },
   noTasks: { textAlign: "center", color: "#7f8c8d", fontSize: "18px" },
   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "20px" },
-  card: { backgroundColor: "white", borderRadius: "12px", padding: "20px", boxShadow: "0 6px 12px rgba(0,0,0,0.1)" },
+  card: { 
+    backgroundColor: "white", 
+    borderRadius: "12px", 
+    padding: "20px", 
+    boxShadow: "0 6px 12px rgba(0,0,0,0.1)", 
+    transition: "transform 0.2s, box-shadow 0.2s", 
+    cursor: "pointer" 
+  },
   cardHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" },
   taskTitle: { margin: 0, fontSize: "20px" },
+  badges: { display: "flex", gap: "8px" },
   statusBadge: { padding: "5px 10px", borderRadius: "8px", color: "white", fontWeight: "bold", fontSize: "12px" },
+  priorityBadge: { padding: "5px 10px", borderRadius: "8px", color: "white", fontWeight: "bold", fontSize: "12px" },
   description: { color: "#7f8c8d", marginBottom: "15px" },
   footer: { textAlign: "right" },
   viewBtn: { padding: "8px 16px", border: "none", borderRadius: "6px", backgroundColor: "#000", color: "white", cursor: "pointer" },
