@@ -90,7 +90,7 @@ function ProjectsPage() {
               <p style={styles.description}>
                 {project.description || "No description"}
               </p>
-
+              <br></br>
               <button
                 style={styles.secondaryBtn}
                 onClick={() => navigate(`/get/taskbyproject/${project.id}`)}
