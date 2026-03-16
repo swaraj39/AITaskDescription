@@ -99,6 +99,9 @@ function TasksPage() {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
+        <button style={styles.backBtn} onClick={() => navigate(-1)}>
+          ← Back
+        </button>
         <h2>Project {id} Tasks</h2>
 
         <button style={styles.primaryBtn} onClick={() => setShowModal(true)}>
@@ -245,7 +248,14 @@ const styles = {
     borderRadius: 6,
     marginBottom: 25,
   },
-
+ backBtn: {
+    background: "#f1f5f9",
+    border: "none",
+    padding: "8px 9px",
+    borderRadius: 6,
+    cursor: "pointer",
+    height: "fit-content"
+  },
   grid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
