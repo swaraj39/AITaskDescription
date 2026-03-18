@@ -24,7 +24,7 @@ function TasksPage() {
 
   const loadTasks = () => {
     setLoading(true);
-    fetch(`http://localhost:8090/get/taskbyproject/${id}`)
+    fetch(`https://aitaskdescription.onrender.com/get/taskbyproject/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setTasks(data);
@@ -35,7 +35,7 @@ function TasksPage() {
   const createTask = () => {
     setCreating(true);
 
-    fetch("http://localhost:8090/add/task", {
+    fetch("https://aitaskdescription.onrender.com/add/task", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTask),
@@ -54,7 +54,7 @@ function TasksPage() {
   };
 
   const updateStatus = (task, status) => {
-    fetch(`http://localhost:8090/update/task/${task.id}`, {
+    fetch(`https://aitaskdescription.onrender.com/update/task/${task.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

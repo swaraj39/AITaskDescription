@@ -23,7 +23,7 @@ function CommentsPage() {
   const loadComments = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8090/get/allbytask/${taskId}`
+        `https://aitaskdescription.onrender.com/get/allbytask/${taskId}`
       );
       setComments(res.data);
     } catch (err) {
@@ -36,7 +36,7 @@ function CommentsPage() {
 
   const createComment = async () => {
     try {
-      await axios.post("http://localhost:8090/add/comment", newComment);
+      await axios.post("https://aitaskdescription.onrender.com/add/comment", newComment);
       setShowModal(false);
       setNewComment({ user: "", comment: "", taskid: taskId });
       loadComments();

@@ -21,7 +21,7 @@ function ProjectsPage() {
 
   const loadProjects = async () => {
     try {
-      const res = await axios.get("http://localhost:8090/get/all/project");
+      const res = await axios.get("https://aitaskdescription.onrender.com/get/all/project");
       setProjects(res.data);
     } catch (err) {
       console.error(err);
@@ -34,7 +34,7 @@ function ProjectsPage() {
   const createProject = async () => {
     try {
 
-      await axios.post("http://localhost:8090/add/project", newProject);
+      await axios.post("https://aitaskdescription.onrender.com/add/project", newProject);
 
       setShowModal(false);
 
