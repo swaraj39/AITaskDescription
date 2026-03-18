@@ -96,7 +96,6 @@ public class FrontController {
     @PutMapping("/update/task/{id}")
     public Task updateTask(@RequestBody TaskDTO taskDTO, @PathVariable Long id) {
         System.out.println(taskDTO + " " + id);
-        Projects projects = projectRepo.findById(taskDTO.getProjectid()).orElseThrow();
         Task task = taskRepo.findById(id).get();
         //String result = aiService.generateText(taskDTO.getTitle());
         //System.out.println(result);
